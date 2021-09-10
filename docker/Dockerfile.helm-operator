@@ -56,8 +56,9 @@ COPY ./helm-repositories.yaml /var/fluxd/helm/repository/repositories.yaml
 RUN mkdir -p /var/fluxd/helm/repository/cache/
 
 RUN if [ `uname -m` = "aarch64" ] ; then \
-       wget https://dl.google.com/go/go1.14.linux-amd64.tar.gz && \
-       tar -xvf tar -xvf go1.14.linux-amd64.tar.gz -C /usr/local; \
+       wget https://dl.google.com/go/go1.14.linux-arm64.tar.gz && \
+       tar -xvf go1.14.linux-arm64.tar.gz -C /usr/local && \
+       ls /usr/local; \
     fi   
 ENV GOROOT=/usr/local/go
 ENV GOPATH=$HOME/go
