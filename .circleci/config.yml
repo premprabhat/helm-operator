@@ -16,7 +16,7 @@ jobs:
   build:
     working_directory: /home/circleci/go/src/github.com/fluxcd/helm-operator
     machine:
-      image: ubuntu-1604:201903-01
+      image: ubuntu-1604:202007-01
     resource_class: large
     environment:
       GO_VERSION: 1.14.2
@@ -26,6 +26,11 @@ jobs:
       PATH: /bin:/usr/bin:/usr/local/go/bin:/home/circleci/go/bin
     steps:
       - checkout
+      - run: mkdir -vp ~/.docker/cli-plugins/
+      - run: curl --silent -L --output ~/.docker/cli-plugins/docker-buildx https://github.com/docker/buildx/releases/download/v0.3.1/buildx-v0.3.1.linux-amd64
+      - run: chmod a+x ~/.docker/cli-plugins/docker-buildx
+      - run: docker run -it --rm --privileged tonistiigi/binfmt --install all
+      - run: docker buildx create --use --name mybuilder
       - run:
           name: Install Golang
           command: |
