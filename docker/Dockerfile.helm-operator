@@ -3,7 +3,7 @@ FROM alpine:3.13
 WORKDIR /home/flux
 
 RUN apk add --no-cache openssh-client ca-certificates tini 'git>=2.12.0' socat curl bash
-
+RUN apt-get install wget
 # Add git hosts to known hosts file so we can use
 # StrickHostKeyChecking with git+ssh
 ADD ./known_hosts.sh /home/flux/known_hosts.sh
@@ -13,10 +13,26 @@ RUN sh /home/flux/known_hosts.sh /etc/ssh/ssh_known_hosts && \
 # Add default SSH config, which points at the private key we'll mount
 COPY ./ssh_config /etc/ssh/ssh_config
 
-COPY ./kubectl /usr/local/bin/
+RUN if [ `uname -m` = "aarch64" ] ; then \
+       wget https://dl.k8s.io/v1.15.7/kubernetes-client-linux-arm64.tar.gz && \
+       tar -xvf kubernetes-client-linux-arm64.tar.gz -C /usr/local/bin/; \
+    else \
+       COPY ./kubectl /usr/local/bin/; \
+    fi   
 # The Helm clients are included as a convenience for troubleshooting
-COPY ./helm2 /usr/local/bin/
-COPY ./helm3 /usr/local/bin/
+RUN if [ `uname -m` = "aarch64" ] ; then \
+       wget https://get.helm.sh/helm-v3.6.3-linux-arm64.tar.gz && \
+       tar -xvf helm-v3.6.3-linux-arm64.tar.gz -C /usr/local/bin/; \
+    else \
+       COPY ./helm2 /usr/local/bin/; \
+    fi   
+
+RUN if [ `uname -m` = "aarch64" ] ; then \
+       wget https://get.helm.sh/helm-v3.5.4-linux-arm64.tar.gz && \
+       tar -xvf helm-v3.5.4-linux-arm64.tar.gz -C /usr/local/bin/; \
+    else \
+       COPY ./helm3 /usr/local/bin/; \
+    fi   
 
 # These are pretty static
 LABEL maintainer="Flux CD <https://github.com/fluxcd/helm-operator/issues>" \
