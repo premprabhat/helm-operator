@@ -67,7 +67,7 @@ COPY / /operator
 RUN if [ `uname -m` = "aarch64" ] ; then \
        git clone https://github.com/fluxcd/helm-operator && \
        ls && \
-       cd cmd/helm-operator && \
+       cd helm-operator/cmd/helm-operator && \
        go build -o helm && \
        ls; \
     else \
