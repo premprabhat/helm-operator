@@ -13,6 +13,7 @@ ENV PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 COPY / /operator
 RUN if [ `uname -m` = "aarch64" ] ; then \
        cd /operator && \
+       ls -l ./cmd/helm-operator && \
        go build -o /usr/local/bin/helm-operator ./cmd/helm-operator; \
     else \
       cp /operator/helm-operator /usr/local/bin/; \ 
