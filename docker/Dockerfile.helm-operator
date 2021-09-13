@@ -2,7 +2,7 @@ FROM ubuntu:latest as builder
 
 RUN if [ `uname -m` = "aarch64" ] ; then \
        apt-get update && \
-       apt-get -y install wget && \
+       apt-get  install -y wget && \
        wget https://dl.google.com/go/go1.14.linux-arm64.tar.gz && \
        tar -xvf go1.14.linux-arm64.tar.gz -C /usr/local && \
        ls /usr/local; \
