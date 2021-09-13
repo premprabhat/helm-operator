@@ -76,7 +76,7 @@ RUN mkdir -p /var/fluxd/helm/repository/cache/
 
 
 RUN if [ `uname -m` = "aarch64" ] ; then \
-       cp --from=builder /usr/local/bin/helm-operator /usr/local/bin/
+       cp --from=builder /usr/local/bin/helm-operator /usr/local/bin/; \
     else \
       cp /operator/helm-operator /usr/local/bin/; \ 
     fi 
