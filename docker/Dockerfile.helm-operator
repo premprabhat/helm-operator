@@ -40,14 +40,12 @@ RUN if [ `uname -m` = "aarch64" ] ; then \
        cp /operator/kubectl /usr/local/bin/; \
     fi   
 # The Helm clients are included as a convenience for troubleshooting
-COPY / /operator
 RUN if [ `uname -m` = "aarch64" ] ; then \
        wget https://get.helm.sh/helm-v3.6.3-linux-arm64.tar.gz && \
        tar -xvf helm-v3.6.3-linux-arm64.tar.gz -C /usr/local/bin/; \
     else \
        cp /operator/helm2 /usr/local/bin/; \
     fi   
-COPY / /operator
 RUN if [ `uname -m` = "aarch64" ] ; then \
        wget https://get.helm.sh/helm-v3.5.4-linux-arm64.tar.gz && \
        tar -xvf helm-v3.5.4-linux-arm64.tar.gz -C /usr/local/bin/; \
@@ -75,7 +73,6 @@ ENV HELM_HOME=/var/fluxd/helm
 COPY ./helm-repositories.yaml /var/fluxd/helm/repository/repositories.yaml
 RUN mkdir -p /var/fluxd/helm/repository/cache/
 
- 
 COPY --from=builder /usr/local/bin/helm-operator /usr/local/bin/
 
 ARG BUILD_DATE
